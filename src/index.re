@@ -3,9 +3,13 @@ open Reprocessing;
 type fruitState = Whole | Slice;
 type size = {width: int, height: int};
 
+type velocity = (int, int);
+let gravity = 3;
+
 type fruitImage = {whole: imageT, splat: imageT};
 type fruit = {
   pos:(int, int),
+  velocity: velocity,
   img:fruitImage,
   state: fruitState,
   size: size
@@ -22,6 +26,7 @@ let setup = (env) => {
 
   let banana = {
     pos: (0, 0),
+    velocity: (0,1),
     img: {whole: bananaImg, splat: bananaSplashImg},
     state: Whole,
     size: smallFruitSize
@@ -60,7 +65,11 @@ let drawFruit = (env, fruit) => {
 };
 
 let updateFruit = (mousePos, fruit) => {
-  {...fruit, state: cutting(mousePos, fruit)};
+  let (posX, posY) = fruit.pos;
+  let (velX, velY) = fruit.velocity;
+  {...fruit,
+    pos: (posX + velX, posY + velY),
+    state: cutting(mousePos, fruit)};
 };
 
 let draw = (state, env) => {
