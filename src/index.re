@@ -2,9 +2,11 @@ open Reprocessing;
 
 type fruitState = Whole | Slice;
 type size = {width: int, height: int};
+
+type fruitImage = {whole: imageT, splat: imageT};
 type fruit = {
   pos:(int, int),
-  img:glEnvT => imageT,
+  img:fruitImage,
   state: fruitState,
   size: size
 };
@@ -15,11 +17,12 @@ let setup = (env) => {
   Env.size(~width=600, ~height=600, env);
 
   let smallFruitSize = {width:100, height:100};
-  let bananaImg = Draw.loadImage(~filename="./assets/banana_small.png");
+  let bananaImg       = Draw.loadImage(~filename="./assets/banana_small.png", env);
+  let bananaSplashImg = Draw.loadImage(~filename="./assets/splash_yellow_small.png", env);
 
   let banana = {
     pos: (0, 0),
-    img: bananaImg,
+    img: {whole: bananaImg, splat: bananaSplashImg},
     state: Whole,
     size: smallFruitSize
   };
@@ -43,13 +46,16 @@ let cutting = (mousePos, fruit) => {
 let drawFruit = (env, fruit) => {
   Draw.fill(Constants.red, env);
   switch(fruit.state){
-  | Whole => Draw.image(fruit.img(env),
+  | Whole => Draw.image(fruit.img.whole,
              ~pos=fruit.pos,
              ~width=100,
              ~height=100,
              env);
-  | Slice => ()
-
+  | Slice => Draw.image(fruit.img.splat,
+             ~pos=fruit.pos,
+             ~width=100,
+             ~height=100,
+             env);
   }
 };
 
