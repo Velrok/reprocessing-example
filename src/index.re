@@ -16,18 +16,19 @@ type fruit = {
 };
 type gameState = { fruits: array(fruit) };
 
+let bananaImg = Draw.loadImage(~filename="./assets/banana_small.png");
+let bananaSplashImg = Draw.loadImage(~filename="./assets/splash_yellow_small.png");
+
+let smallFruitSize = {width:100, height:100};
 
 let setup = (env) => {
   Env.size(~width=600, ~height=600, env);
 
-  let smallFruitSize = {width:100, height:100};
-  let bananaImg       = Draw.loadImage(~filename="./assets/banana_small.png", env);
-  let bananaSplashImg = Draw.loadImage(~filename="./assets/splash_yellow_small.png", env);
 
   let banana = {
-    pos: (0, 0),
-    velocity: (0,1),
-    img: {whole: bananaImg, splat: bananaSplashImg},
+    pos: (0, 500),
+    velocity: (0,-35),
+    img: {whole: bananaImg(env), splat: bananaSplashImg(env)},
     state: Whole,
     size: smallFruitSize
   };
@@ -64,17 +65,20 @@ let drawFruit = (env, fruit) => {
   }
 };
 
-let updateFruit = (mousePos, fruit) => {
+let updateFruit = (env: glEnvT, fruit) => {
+  let mousePos = env.mouse.pos;
   let (posX, posY) = fruit.pos;
   let (velX, velY) = fruit.velocity;
+
   {...fruit,
+    velocity: (velX, velY + gravity),
     pos: (posX + velX, posY + velY),
     state: cutting(mousePos, fruit)};
 };
 
 let draw = (state, env) => {
   Draw.background(Utils.color(~r=255, ~g=217, ~b=229, ~a=255), env);
-  let mouse = env.mouse;
+  //let mouse = env.mouse;
   //Draw.fill(Constants.blue, env);
   //Draw.rect(~pos=mouse.pos, ~width=10, ~height=10, env);
   //print_endline();
