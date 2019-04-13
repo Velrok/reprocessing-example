@@ -82,7 +82,7 @@ let draw = (state, env) => {
   //Draw.fill(Constants.blue, env);
   //Draw.rect(~pos=mouse.pos, ~width=10, ~height=10, env);
   //print_endline();
-  let updatedFruits = Array.map(updateFruit(mouse.pos),state.fruits)
+  let updatedFruits = Array.map(updateFruit(env), state.fruits);
   Array.iter(drawFruit(env), updatedFruits);
   {fruits: updatedFruits};
 };
