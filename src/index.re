@@ -4,7 +4,7 @@ type fruitState = Whole | Slice;
 type size = {width: int, height: int};
 
 type velocity = (int, int);
-let gravity = 3;
+let gravity = 1;
 
 type fruitImage = {whole: imageT, splat: imageT};
 type fruit = {
