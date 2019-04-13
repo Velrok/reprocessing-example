@@ -45,17 +45,17 @@ let cutting = (mousePos, fruit) => {
 
 let drawFruit = (env, fruit) => {
   Draw.fill(Constants.red, env);
+  let f = (img) => {
+    Draw.image(img,
+               ~pos=fruit.pos,
+               ~width=100,
+               ~height=100,
+               env)
+  }
+
   switch(fruit.state){
-  | Whole => Draw.image(fruit.img.whole,
-             ~pos=fruit.pos,
-             ~width=100,
-             ~height=100,
-             env);
-  | Slice => Draw.image(fruit.img.splat,
-             ~pos=fruit.pos,
-             ~width=100,
-             ~height=100,
-             env);
+  | Whole => f(fruit.img.whole);
+  | Slice => f(fruit.img.splat);
   }
 };
 
@@ -66,8 +66,8 @@ let updateFruit = (mousePos, fruit) => {
 let draw = (state, env) => {
   Draw.background(Utils.color(~r=255, ~g=217, ~b=229, ~a=255), env);
   let mouse = env.mouse;
-  Draw.fill(Constants.blue, env);
-  Draw.rect(~pos=mouse.pos, ~width=10, ~height=10, env);
+  //Draw.fill(Constants.blue, env);
+  //Draw.rect(~pos=mouse.pos, ~width=10, ~height=10, env);
   //print_endline();
   let updatedFruits = Array.map(updateFruit(mouse.pos),state.fruits)
   Array.iter(drawFruit(env), updatedFruits);
